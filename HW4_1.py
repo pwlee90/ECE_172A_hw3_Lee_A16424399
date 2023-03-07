@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-improt matplotlib
+import matplotlib.pyplot as plt
 
 def computeNormGrayHistogram(img):
     #Read image in grayscale mode
