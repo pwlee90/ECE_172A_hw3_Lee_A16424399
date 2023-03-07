@@ -1,5 +1,5 @@
 import numpy as np
-import cv2
+import cv2 as cv2
 import matplotlib.pyplot as plt
 
 def computeNormGrayHistogram(img):
@@ -8,7 +8,7 @@ def computeNormGrayHistogram(img):
     #find sum of each values
     sum = np.zeros(256)
     for i in gray:
-        sum[int(i)] = sum[int(i)] + 1
+        sum[int(i)] += 1
     output = getNbins(32, sum)
     return output
 
@@ -27,10 +27,16 @@ def getNbins(nbins, sum):
     for i in output:
         for j in bitSize:
             i += sum[int(i * bitSize + j)]
+    #normalize
+    total = 0
+    for i in output:
+        total += i
+    for i in output:
+        i = i/total
     return output
 
-img = cv2.imread('C:/Users/N/Desktop/Test.jpg')
-computeNormGrayHistogram(img)
-#Show the histogram
-cv2.imshow('colorhist',h)
-cv2.waitKey(0)
+img = cv2.imread('forest.jpg')
+grayH = computeNormGrayHistogram(img)
+plt.plot(grayH)
+rgbH = computeNormGrayHistogram(img)
+plt.plot(rgbH[0:32])
