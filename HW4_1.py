@@ -14,7 +14,7 @@ def computeNormGrayHistogram(img):
     return output
 
 def computeNormRGBHistogram(img):
-   B, G, R = cv2.split(img)
+   (B, G, R) = cv2.split(img)
    #flatten B, G, R
    B = np.array(B)
    G = np.array(G)
@@ -54,9 +54,32 @@ def getNbins(nbins, sum):
     # print(output)
     return output
 
+#plot the histogram
 img = cv2.imread('forest.jpg')
+#cv2.imshow("origin", img)
+print("img")
+print(img)
 grayH = computeNormGrayHistogram(img)
 plt.plot(grayH)
-rgbH = computeNormRGBHistogram(img)
-plt.plot(rgbH[0:32])
+rgb = computeNormRGBHistogram(img)
+plt.plot(rgb[0:32])
 plt.show()
+#plot the flipped image's histogram
+img_flip = np.fliplr(img)
+grayH = computeNormGrayHistogram(img)
+plt.plot(grayH)
+rgb = computeNormRGBHistogram(img)
+plt.plot(rgb[0:31])
+plt.show()
+#double the values of R
+(B, G, R) = cv2.split(img)
+# print("R")
+# print(R)
+for index, i in enumerate(R):
+    R[index] = i*2
+# print("new R")
+# print(R)
+new_img = cv2.merge([B, G, R])
+print("new img")
+print(new_img)
+cv2.imshow("2Rforest", new_img)
