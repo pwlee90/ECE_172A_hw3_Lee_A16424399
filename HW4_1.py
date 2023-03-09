@@ -15,11 +15,23 @@ def computeNormGrayHistogram(img):
 
 def computeNormRGBHistogram(img):
    B, G, R = cv2.split(img)
+   #flatten B, G, R
+   B = np.array(B)
+   G = np.array(G)
+   R = np.array(R)
+   B = B.flatten()
+   G = G.flatten()
+   R = R.flatten()
    output_b = getNbins(32, B)
    output_g = getNbins(32, G)
    output_r = getNbins(32, R)
    output = []
-   output.append(output_r, output_g, output_b)
+   output = np.append(output, output_r)
+   output = np.append(output, output_g)
+   output = np.append(output, output_b)
+   output = output.flatten()
+#    print("output")
+#    print(output)
    return output
 
 def getNbins(nbins, sum):
@@ -45,5 +57,6 @@ def getNbins(nbins, sum):
 img = cv2.imread('forest.jpg')
 grayH = computeNormGrayHistogram(img)
 plt.plot(grayH)
-rgbH = computeNormGrayHistogram(img)
+rgbH = computeNormRGBHistogram(img)
 plt.plot(rgbH[0:32])
+plt.show()
