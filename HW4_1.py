@@ -8,7 +8,8 @@ def computeNormGrayHistogram(img):
     #find sum of each values
     sum = np.zeros(256)
     for i in gray:
-        sum[int(i)] += 1
+        for j in i:
+            sum[int(j)] = sum[int(j)] + 1
     output = getNbins(32, sum)
     return output
 
@@ -22,17 +23,23 @@ def computeNormRGBHistogram(img):
    return output
 
 def getNbins(nbins, sum):
-    bitSize = len(sum)/nbins
+    bitSize = int(len(sum)/nbins)
+    # print("sum")
+    # print(sum)
     output = np.zeros(nbins)
-    for i in output:
-        for j in bitSize:
-            i += sum[int(i * bitSize + j)]
+    for index, i in enumerate(output):
+        for j in range(0, bitSize):
+            output[index] += sum[int(index * bitSize + j)]
     #normalize
-    total = 0
+    # print("output")
+    # print(output)
+    total = float(0)
     for i in output:
-        total += i
-    for i in output:
-        i = i/total
+        total += float(i)
+    for index, i in enumerate(output):
+        output[index] = float(i/total)
+    # print("normalized output")
+    # print(output)
     return output
 
 img = cv2.imread('forest.jpg')
