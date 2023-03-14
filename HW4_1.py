@@ -63,13 +63,16 @@ def AHE(im, winSize):
     G = np.array(G)
     R = np.array(R)
     padSize = int((winSize-1)/2)
-    print("R length")
-    print(len(R))
+    print("R")
+    print(R)
     #Pad the image im on all 4 sides by mirroring intensity values so that the contextual region for edge pixels remains valid.
     #### not padding!
-    imgR = cv2.copyMakeBorder(R, padSize, padSize, padSize, padSize, cv2.BORDER_CONSTANT)
-    imgG = cv2.copyMakeBorder(G, padSize, padSize, padSize, padSize, cv2.BORDER_CONSTANT)
-    imgB = cv2.copyMakeBorder(B, padSize, padSize, padSize, padSize, cv2.BORDER_CONSTANT)
+    imgR = np.pad(R, (padSize, padSize), 'reflect')
+    imgG = np.pad(G, (padSize, padSize), 'reflect')
+    imgB = np.pad(B, (padSize, padSize), 'reflect')
+    print(imgR)
+    print("imgR")
+    #imgG = cv2.copyMakeBorder(G, padSize, padSize, padSize, padSize, cv2.BORDER_CONSTANT)
     # print("imgR")
     # print(imgR)
     #for each pixel (x, y) in im, do
@@ -77,34 +80,35 @@ def AHE(im, winSize):
         # print("imgR[x]")
         # print(imgR[x])
         for y in imgR[x]:
-            # print("y")
-            # print(y)
-            rank = 0
-            #contextual region = winSize x winSize window centered around (x, y)
-            region = []
-            region = np.array(region)
-            for winX in range(winSize):
-                list = []
-                list = np.array(region)
-                for winY in range(winSize):
-                    print("imgR[x-winSize/2 + winX]")
-                    print(imgR[x-winSize/2 + winX])
-                    val = [imgR[x-winSize/2 + winX], imgR[y-winSize/2 + winY]]
-                    print("val")
-                    print(val)
-                    list = np.append(region,val)
-                print("list")
-                print(list)
-                region = np.append(region, list)
-                # for (i, j) in contextual region do
-                for i in range(len(region)):
-                    for j in i:
-                        #     if im(x, y) > im(i, j) then
-                        if(imgR[x][y] > img[i][j]):
-                            rank = rank + 1
-                    #output(x, y) = rank x 255/(winSize x winSize)
-                    output = np.append(output,[rank * 255 / (winSize * winSize)])
-                    output[x][y] = rank * 255 / (winSize * winSize)
+            if(x > padSize and y > padSize):
+                # print("y")
+                # print(y)
+                rank = 0
+                #contextual region = winSize x winSize window centered around (x, y)
+                region = []
+                region = np.array(region)
+                for winX in range(winSize):
+                    list = []
+                    list = np.array(region)
+                    for winY in range(winSize):
+                        print("imgR[x-winSize/2 + winX]")
+                        print(imgR[x-winSize/2 + winX])
+                        val = [imgR[x-winSize/2 + winX], imgR[y-winSize/2 + winY]]
+                        print("val")
+                        print(val)
+                        list = np.append(region,val)
+                    print("list")
+                    print(list)
+                    region = np.append(region, list)
+                    # for (i, j) in contextual region do
+                    for i in range(len(region)):
+                        for j in i:
+                            #     if im(x, y) > im(i, j) then
+                            if(imgR[x][y] > img[i][j]):
+                                rank = rank + 1
+                        #output(x, y) = rank x 255/(winSize x winSize)
+                        output = np.append(output,[rank * 255 / (winSize * winSize)])
+                        output[x][y] = rank * 255 / (winSize * winSize)
     print("output")
     print(output)
     return output
@@ -156,10 +160,14 @@ img = cv2.imread('forest.jpg')
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
 # AHE
-ahe = AHE(img, 2)
+he_img = cv2.imread('beach.png', 0)
+ahe = AHE(he_img, 2)
 print("ahe")
 print(ahe)
 cv2.imshow("ahe", ahe)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-
+# he = cv2.equalizeHist(he_img) 
+# cv2.imshow("he", he)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
