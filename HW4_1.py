@@ -55,54 +55,111 @@ def getNbins(nbins, sum):
     # print(output)
     return output
 
+def AHE(im, winSize):
+    output = [[]]
+    (B, G, R) = cv2.split(im)
+    #flatten B, G, R
+    B = np.array(B)
+    G = np.array(G)
+    R = np.array(R)
+    padSize = int((winSize-1)/2)
+    print("R length")
+    print(len(R))
+    #Pad the image im on all 4 sides by mirroring intensity values so that the contextual region for edge pixels remains valid.
+    #### not padding!
+    imgR = cv2.copyMakeBorder(R, padSize, padSize, padSize, padSize, cv2.BORDER_CONSTANT)
+    imgG = cv2.copyMakeBorder(G, padSize, padSize, padSize, padSize, cv2.BORDER_CONSTANT)
+    imgB = cv2.copyMakeBorder(B, padSize, padSize, padSize, padSize, cv2.BORDER_CONSTANT)
+    # print("imgR")
+    # print(imgR)
+    #for each pixel (x, y) in im, do
+    for x in range(len(imgR)):
+        # print("imgR[x]")
+        # print(imgR[x])
+        for y in imgR[x]:
+            # print("y")
+            # print(y)
+            rank = 0
+            #contextual region = winSize x winSize window centered around (x, y)
+            region = []
+            region = np.array(region)
+            for winX in range(winSize):
+                list = []
+                list = np.array(region)
+                for winY in range(winSize):
+                    print("imgR[x-winSize/2 + winX]")
+                    print(imgR[x-winSize/2 + winX])
+                    val = [imgR[x-winSize/2 + winX], imgR[y-winSize/2 + winY]]
+                    print("val")
+                    print(val)
+                    list = np.append(region,val)
+                print("list")
+                print(list)
+                region = np.append(region, list)
+                # for (i, j) in contextual region do
+                for i in range(len(region)):
+                    for j in i:
+                        #     if im(x, y) > im(i, j) then
+                        if(imgR[x][y] > img[i][j]):
+                            rank = rank + 1
+                    #output(x, y) = rank x 255/(winSize x winSize)
+                    output = np.append(output,[rank * 255 / (winSize * winSize)])
+                    output[x][y] = rank * 255 / (winSize * winSize)
+    print("output")
+    print(output)
+    return output
 #plot the histogram
 img = cv2.imread('forest.jpg')
 #cv2.imshow("origin", img)
-print("img")
-print(img)
-x = np.linspace(1, 32, num = 32)
-grayH = computeNormGrayHistogram(img)
-plt.bar(x, grayH)
-plt.show()
-plt.close()
-rgb = computeNormRGBHistogram(img)
-color = np.zeros(0)
-for i in range(0, 32):
-    color = np.append(color, 'red')
-for i in range(0, 32):
-    color = np.append(color, 'green') 
-for i in range(0, 32):
-    color = np.append(color, 'blue') 
-color_list = color.tolist()  
-# print("color list")
-# print(color_list)
-x = np.linspace(1, 96, num = 96)
-plt.bar(x, rgb, color = color_list)
-plt.show()
-plt.close()
-#plot the flipped image's histogram
-img_flip = np.fliplr(img)
-x = np.linspace(1, 32, num = 32)
-grayH = computeNormGrayHistogram(img)
-plt.bar(x, grayH)
-plt.show()
-plt.close()
-rgb = computeNormRGBHistogram(img)
-x = np.linspace(1, 96, num = 96)
-plt.bar(x, rgb, color = color_list)
-plt.show()
-plt.close()
+# x = np.linspace(1, 32, num = 32)
+# grayH = computeNormGrayHistogram(img)
+# plt.bar(x, grayH)
+# plt.show()
+# plt.close()
+# rgb = computeNormRGBHistogram(img)
+# color = np.zeros(0)
+# for i in range(0, 32):
+#     color = np.append(color, 'red')
+# for i in range(0, 32):
+#     color = np.append(color, 'green') 
+# for i in range(0, 32):
+#     color = np.append(color, 'blue') 
+# color_list = color.tolist()  
+# # print("color list")
+# # print(color_list)
+# x = np.linspace(1, 96, num = 96)
+# plt.bar(x, rgb, color = color_list)
+# plt.show()
+# plt.close()
+# #plot the flipped image's histogram
+# img_flip = np.fliplr(img)
+# x = np.linspace(1, 32, num = 32)
+# grayH = computeNormGrayHistogram(img)
+# plt.bar(x, grayH)
+# plt.show()
+# plt.close()
+# rgb = computeNormRGBHistogram(img)
+# x = np.linspace(1, 96, num = 96)
+# plt.bar(x, rgb, color = color_list)
+# plt.show()
+# plt.close()
 #double the values of R
-(B, G, R) = cv2.split(img)
-# print("R")
-# print(R)
-for index, i in enumerate(R):
-    R[index] = i*2
-# print("new R")
-# print(R)
-new_img = cv2.merge([B, G, R])
-print("new img")
-print(new_img)
-cv2.imshow("2Rforest", new_img)
+# (B, G, R) = cv2.split(img)
+# # print("R")
+# # print(R)
+# for index, i in enumerate(R):
+#     R[index] = i*2
+# # print("new R")
+# # print(R)
+# new_img = cv2.merge([B, G, R])
+# cv2.imshow("2Rforest", new_img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+# AHE
+ahe = AHE(img, 2)
+print("ahe")
+print(ahe)
+cv2.imshow("ahe", ahe)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
