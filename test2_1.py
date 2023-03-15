@@ -156,10 +156,13 @@ def median_filter(img, winSize):
 # E_i, E_j = minimal_value(template, original_img)
 
 # # 10 cross-correlation
-img = cv2.imread('mural.jpg')
+img = cv2.imread('mural.jpg', cv2.IMREAD_GRAYSCALE)
 img2 = img.copy()
-template = cv2.imread('template.jpg')
-w, h = template.shape[0:2]
+template = cv2.imread('template.jpg', cv2.IMREAD_GRAYSCALE)
+#for gray
+w, h = template.shape[::-1]
+#for RGB
+# w, h = template.shape[0:2]
 # All the 6 methods for comparison in a list
 methods = ['cv2.TM_CCORR', 'cv2.TM_CCORR_NORMED']
 for meth in methods:
@@ -169,13 +172,9 @@ for meth in methods:
     res = cv2.matchTemplate(img,template,method)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
     # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
-    if method in [cv2.TM_CCORR, cv2.TM_CCORR_NORMED]:
-        top_left = min_loc
-    else:
-        top_left = max_loc
-    bottom_right = (top_left[0] + w, top_left[1] + h)
+    top_left = (max_loc[0] - 50, max_loc[1] - 50)
+    bottom_right = (top_left[0] + 100, top_left[1] + 100)
     cv2.rectangle(img, top_left, bottom_right, 255, 2)
-    #cv2.rectangle(img,top_left, bottom_right, 255, 2)
     plt.subplot(121),plt.imshow(res,cmap = 'gray')
     plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
     plt.subplot(122),plt.imshow(img,cmap = 'gray')
