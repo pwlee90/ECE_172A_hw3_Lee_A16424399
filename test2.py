@@ -1,6 +1,5 @@
 import numpy as np
 import cv2 as cv2
-import matplotlib.pyplot as plt
 
 def computeNormGrayHistogram(img):
     #Read image in grayscale mode
@@ -101,8 +100,8 @@ def AHE(im, winSize):
                                 rank = rank + 1
                     #output(x, y) = rank x 255/(winSize x winSize)
                     output[x][y] = rank * 255 / (winSize * winSize)
-    # print("output")
-    # print(output)
+    print("output")
+    print(output)
     return output
 #1. 2. 3. 
 #plot the histogram
@@ -179,10 +178,10 @@ img = cv2.imread('forest.jpg')
 he_img = cv2.imread('beach.png',0)
 # print("np.size(he_img)")
 # print(np.shape(he_img))
-ahe = AHE(he_img, 2)
+ahe = AHE(he_img, 129)
 # print("ahe")
 # print(ahe)
-cv2.imshow("ahe - test", ahe)
+cv2.imshow("ahe - 129", ahe)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
