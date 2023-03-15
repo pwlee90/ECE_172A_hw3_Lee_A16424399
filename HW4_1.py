@@ -107,12 +107,12 @@ def AHE(im, winSize):
 #1. 2. 3. 
 #plot the histogram
 img = cv2.imread('forest.jpg')
-# cv2.imshow("origin", img)
-# x = np.linspace(1, 32, num = 32)
-# grayH = computeNormGrayHistogram(img)
-# plt.bar(x, grayH)
-# plt.show()
-# plt.close()
+cv2.imshow("origin", img)
+x = np.linspace(1, 32, num = 32)
+grayH = computeNormGrayHistogram(img)
+plt.bar(x, grayH)
+plt.show()
+plt.close()
 # rgb = computeNormRGBHistogram(img)
 # color = np.zeros(0)
 # for i in range(0, 32):
@@ -176,15 +176,15 @@ img = cv2.imread('forest.jpg')
 # plt.close()
 
 # 6. AHE
-he_img = cv2.imread('beach.png',0)
-# print("np.size(he_img)")
-# print(np.shape(he_img))
-ahe = AHE(he_img, 2)
-# print("ahe")
-# print(ahe)
-cv2.imshow("ahe - test", ahe)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# he_img = cv2.imread('beach.png',0)
+# # print("np.size(he_img)")
+# # print(np.shape(he_img))
+# ahe = AHE(he_img, 2)
+# # print("ahe")
+# # print(ahe)
+# cv2.imshow("ahe - test", ahe)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
 
 #7. HE
 # he = cv2.equalizeHist(he_img) 

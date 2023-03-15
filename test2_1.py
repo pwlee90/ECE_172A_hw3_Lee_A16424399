@@ -67,23 +67,23 @@ def median_filter(img, winSize):
             median = np.median(imgR[x:x+padSize,:][:,y:y+padSize])
             output[x][y] = median/255
     return output
-def minimal_value(img, original_img):
-    #for every point in original image as the top left point
-    max  = 0
-    max_x = 0
-    max_y = 0
-    for x in range(len(original_img) - len(img)):
-        for y in range(len(original_img[0]) - len(img[0])):
-            sum = 0
-            #for every point in cropped image
-            for i in range(len(img)):
-                for j in img[i]:
-                    sum += abs(original_img[x][y] - img[i][j])
-            if sum > max:
-                max = sum
-                max_x = x
-                max_y = y
-    return max_x, max_y
+# def minimal_value(img, original_img):
+#     #for every point in original image as the top left point
+#     max  = 0
+#     max_x = 0
+#     max_y = 0
+#     for x in range(len(original_img) - len(img)):
+#         for y in range(len(original_img[0]) - len(img[0])):
+#             sum = 0
+#             #for every point in cropped image
+#             for i in range(len(img)):
+#                 for j in img[i]:
+#                     sum += abs(original_img[x][y] - img[i][j])
+#             if sum > max:
+#                 max = sum
+#                 max_x = x
+#                 max_y = y
+#     return max_x, max_y
     
 
 #his of mural_1
@@ -154,20 +154,34 @@ def minimal_value(img, original_img):
 # w, h = template.shape[::-1]
 # original_img = cv2.imread('template_old.jpeg', 0)
 # E_i, E_j = minimal_value(template, original_img)
-# # 9 perfect match, the f^2 term should equal the t^2 term
+
 # # 10 cross-correlation
-# res = cv2.matchTemplate(original_img, template, 'cv2.TM_CCORR')
-# # Store the coordinates of matched area in a numpy array
-# threshold = 0.8
-# loc = np.where(res >= threshold)
-# # Draw a rectangle (100,100) center the matched region.
-# center_x = int(range(loc)/2)
-# center_y = int(range(loc[0])/2)
-# cv2.rectangle(original_img, (center_x - 50, center_y - 50), (center_x + 50, center_y + 50), (0, 255, 255), 2)
-# # Show the final image with the matched area.
-# cv2.imshow('Detected', original_img)
-# # 11 normalized cross-correlation
-# res = cv2.matchTemplate(original_img, template, 'cv2.TM_CCORR_NORMED')
+img = cv2.imread('mural.jpg')
+img2 = img.copy()
+template = cv2.imread('template.jpg')
+w, h = template.shape[0:2]
+# All the 6 methods for comparison in a list
+methods = ['cv2.TM_CCORR', 'cv2.TM_CCORR_NORMED']
+for meth in methods:
+    img = img2.copy()
+    method = eval(meth)
+    # Apply template Matching
+    res = cv2.matchTemplate(img,template,method)
+    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+    # If the method is TM_SQDIFF or TM_SQDIFF_NORMED, take minimum
+    if method in [cv2.TM_CCORR, cv2.TM_CCORR_NORMED]:
+        top_left = min_loc
+    else:
+        top_left = max_loc
+    bottom_right = (top_left[0] + w, top_left[1] + h)
+    cv2.rectangle(img, top_left, bottom_right, 255, 2)
+    #cv2.rectangle(img,top_left, bottom_right, 255, 2)
+    plt.subplot(121),plt.imshow(res,cmap = 'gray')
+    plt.title('Matching Result'), plt.xticks([]), plt.yticks([])
+    plt.subplot(122),plt.imshow(img,cmap = 'gray')
+    plt.title('Detected Point'), plt.xticks([]), plt.yticks([])
+    plt.suptitle(meth)
+    plt.show()
 
 #ndimage.convolve
 #dot product the smallest

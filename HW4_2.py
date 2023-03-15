@@ -137,15 +137,15 @@ def minimal_value(img, original_img):
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
 #median
-img2 = cv2.imread('mural_noise2.jpg', 0)
-# print(np.shape(img1))
-# print("np.shape(img)")
-output = median_filter(img2,81)
-# print("np.shape(output)")
-# print(np.shape(output))
-cv2.imshow("median 2", output)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+# img2 = cv2.imread('mural_noise2.jpg', 0)
+# # print(np.shape(img1))
+# # print("np.shape(img)")
+# output = median_filter(img2,81)
+# # print("np.shape(output)")
+# # print(np.shape(output))
+# cv2.imshow("median 2", output)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
 
 #8 find crop image in original iamge
 # Read the template
