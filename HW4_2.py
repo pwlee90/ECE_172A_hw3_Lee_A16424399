@@ -13,6 +13,16 @@ def computeNormGrayHistogram(img):
     output = getNbins(32, sum)
     return output
 
+def computeNormHistogram(img):
+    img = img*255
+    #find sum of each values
+    sum = np.zeros(256)
+    for i in img:
+        for j in i:
+            sum[int(j)] = sum[int(j)] + 1
+    output = getNbins(32, sum)
+    return output
+
 def getNbins(nbins, sum):
     bitSize = int(len(sum)/nbins)
     # print("sum")
@@ -36,8 +46,8 @@ def getNbins(nbins, sum):
 def mean_filter(img, winSize):
     img = np.array(img)
     padSize = int((winSize-1)/2)
-    print("padSize")
-    print(padSize)
+    # print("padSize")
+    # print(padSize)
     output = np.empty([np.shape(img)[0],np.shape(img)[1]])
     #Pad the image im on all 4 sides by mirroring intensity values so that the contextual region for edge pixels remains valid.
     #### not padding!
@@ -53,8 +63,8 @@ def mean_filter(img, winSize):
 def median_filter(img, winSize):
     img = np.array(img)
     padSize = int((winSize-1)/2)
-    print("padSize")
-    print(padSize)
+    # print("padSize")
+    # print(padSize)
     output = np.empty([np.shape(img)[0],np.shape(img)[1]])
     #Pad the image im on all 4 sides by mirroring intensity values so that the contextual region for edge pixels remains valid.
     #### not padding!
@@ -112,6 +122,11 @@ def minimal_value(img, original_img):
 # output = mean_filter(img1,81)
 # # print("np.shape(output)")
 # # print(np.shape(output))
+# x = np.linspace(1, 32, num = 32)
+# his = computeNormHistogram(output)
+# plt.bar(x, his)
+# plt.show()
+# plt.close()
 # cv2.imshow("mean 1", output)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
@@ -119,9 +134,14 @@ def minimal_value(img, original_img):
 # img1 = cv2.imread('mural_noise1.jpg', 0)
 # # print(np.shape(img1))
 # # print("np.shape(img)")
-# output = median_filter(img1,81)
-# # print("np.shape(output)")
-# # print(np.shape(output))
+# output = median_filter(img1,5)
+# # # print("np.shape(output)")
+# # # print(np.shape(output))
+# x = np.linspace(1, 32, num = 32)
+# his = computeNormHistogram(output)
+# plt.bar(x, his)
+# plt.show()
+# plt.close()
 # cv2.imshow("median 1", output)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
@@ -130,17 +150,27 @@ def minimal_value(img, original_img):
 # img2 = cv2.imread('mural_noise2.jpg', 0)
 # # print(np.shape(img1))
 # # print("np.shape(img)")
-# output = mean_filter(img2,5)
+# output = mean_filter(img2,81)
 # # print("np.shape(output)")
 # # print(np.shape(output))
+# x = np.linspace(1, 32, num = 32)
+# his = computeNormHistogram(output)
+# plt.bar(x, his)
+# plt.show()
+# plt.close()
 # cv2.imshow("mean 2", output)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
 #median
-# img2 = cv2.imread('mural_noise2.jpg', 0)
-# # print(np.shape(img1))
-# # print("np.shape(img)")
-# output = median_filter(img2,81)
+img2 = cv2.imread('mural_noise2.jpg', 0)
+# print(np.shape(img1))
+# print("np.shape(img)")
+output = median_filter(img2,5)
+x = np.linspace(1, 32, num = 32)
+his = computeNormHistogram(output)
+plt.bar(x, his)
+plt.show()
+plt.close()
 # # print("np.shape(output)")
 # # print(np.shape(output))
 # cv2.imshow("median 2", output)
